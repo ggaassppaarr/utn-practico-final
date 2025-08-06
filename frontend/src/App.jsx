@@ -1,35 +1,113 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+
+import { useState, useEffect } from 'react';
+import './App.css';
+
+export const App = () => {
+  const [file, setFile] = useState(null);
+  const [rows, setRows] = useState([]);
+  const [newRow, setNewRow] = useState({});
+
+  const fetchData = async () => {
+    const res = await fetch('http://localhost:3001/data');
+    const json = await res.json();
+    setRows(json);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append('file', file);
+    await fetch('http://localhost:3001/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    fetchData();
+  };
+
+  const handleAdd = async () => {
+    await fetch('http://localhost:3001/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newRow),
+    });
+    setNewRow({});
+    fetchData();
+  };
+
+  const handleUpdate = async (i, row) => {
+    await fetch(`http://localhost:3001/data/${i}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(row),
+    });
+    fetchData();
+  };
+
+  const handleDelete = async (i) => {
+    await fetch(`http://localhost:3001/data/${i}`, {
+      method: 'DELETE',
+    });
+    fetchData();
+  };
+
+  const downloadCSV = () => {
+    window.location.href = 'http://localhost:3001/export';
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h1>Gestión de CSV</h1>
+      <input type="file" accept=".csv" onChange={e => setFile(e.target.files[0])} />
+      <button onClick={handleUpload}>Cargar CSV</button>
 
-export default App
+      <h2>Nuevo registro</h2>
+      {rows[0] && Object.keys(rows[0]).map(key => (
+        <input
+          key={key}
+          placeholder={key}
+          value={newRow[key] || ''}
+          onChange={e => setNewRow({ ...newRow, [key]: e.target.value })}
+        />
+      ))}
+      <button onClick={handleAdd}>Agregar</button>
+
+      <h2>Registros</h2>
+      <table border="1">
+        <thead>
+          <tr>
+            {rows[0] && Object.keys(rows[0]).map(key => <th key={key}>{key}</th>)}
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i}>
+              {Object.keys(row).map(key => (
+                <td key={key}>
+                  <input
+                    value={row[key]}
+                    onChange={e => {
+                      const newRows = [...rows];
+                      newRows[i][key] = e.target.value;
+                      setRows(newRows);
+                    }}
+                  />
+                </td>
+              ))}
+              <td>
+                <button onClick={() => handleUpdate(i, row)}>Guardar</button>
+                <button onClick={() => handleDelete(i)}>Eliminar</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <button onClick={downloadCSV}>Exportar CSV</button>
+    </div>
+  );
+};
