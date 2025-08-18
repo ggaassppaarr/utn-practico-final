@@ -1,8 +1,12 @@
 # Curso de Prompt Engineering para desarrolladores FrontEnd
+
 - Gabriel Alberini - Profesor
 
 # Trabajo Práctico Final - Gestión de CSV
+
 - Gaspar Pozzi - Alumno 
+
+# Descripción del proyecto 
 
 - 🗄️ Persistencia SQLite + Prisma (migraciones)  
 - 📥 Carga CSV, inferencia de columnas  
