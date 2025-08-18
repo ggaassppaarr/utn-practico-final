@@ -14,6 +14,7 @@
 - 🔎 Búsqueda/orden/paginación listas para extender (internamente ordenado por `createdAt`)  
 - 🔐 Autenticación JWT + roles (endpoints `/auth/*` listos)  
 - 🔀 **Merge** de archivos (`POST /merge`)  
+- 🌗 Dark/Light theme toggle
 
 ## Cómo ejecutar
 

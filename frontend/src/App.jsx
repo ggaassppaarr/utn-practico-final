@@ -246,87 +246,86 @@ function App() {
         {/* Action Cards */}
         <div className="grid grid-cols-1 gap-8 mb-8 lg:grid-cols-2">
           {/* Upload */}
-          <div className={
-            darkMode
-              ? "p-8 transition-all duration-300 border bg-gray-900/70 backdrop-blur-sm rounded-2xl border-gray-700/50 hover:shadow-xl"
-              : "p-8 transition-all duration-300 border bg-white/70 backdrop-blur-sm rounded-2xl border-gray-200/50 hover:shadow-xl"
-          }>
-            <div className="flex items-center mb-6 space-x-3">
-              <div className={
-                darkMode
-                  ? "flex items-center justify-center w-10 h-10 bg-indigo-900 rounded-xl"
-                  : "flex items-center justify-center w-10 h-10 bg-blue-100 rounded-xl"
-              }>
-                <Upload className={darkMode ? "w-5 h-5 text-indigo-300" : "w-5 h-5 text-blue-600"} />
-              </div>
-              <h2 className={darkMode ? "text-xl font-semibold text-gray-100" : "text-xl font-semibold text-gray-900"}>Cargar archivo</h2>
-            </div>
-
-            <div className="space-y-4">
-              <input
-                type="file"
-                accept=".csv"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className={
-                  darkMode
-                    ? "block w-full text-sm text-gray-300 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-indigo-950 file:to-indigo-900 file:text-indigo-200 hover:file:from-indigo-900 hover:file:to-indigo-800 file:cursor-pointer file:transition-all file:duration-200"
-                    : "block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-blue-50 file:to-indigo-50 file:text-blue-700 hover:file:from-blue-100 hover:file:to-indigo-100 file:cursor-pointer file:transition-all file:duration-200"
-                }
-              />
-
-              <button
-                onClick={handleUpload}
-                disabled={!file || isUploading}
-                className={
-                  darkMode
-                    ? "flex items-center justify-center w-full px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-indigo-800 to-indigo-600 hover:from-indigo-900 hover:to-indigo-700 rounded-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    : "flex items-center justify-center w-full px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                }
-              >
-                {isUploading ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    <span>Subiendo...</span>
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4" />
-                    <span>Subir archivo CSV</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
+          <div className={darkMode
+  ? "p-8 transition-all duration-300 border bg-gray-900/70 backdrop-blur-sm rounded-2xl border-gray-700/50 hover:shadow-xl flex flex-col justify-between h-full"
+  : "p-8 transition-all duration-300 border bg-white/70 backdrop-blur-sm rounded-2xl border-gray-200/50 hover:shadow-xl flex flex-col justify-between h-full"
+}>
+  <div>
+    <div className="flex items-center mb-6 space-x-3">
+      <div className={darkMode
+        ? "flex items-center justify-center w-10 h-10 bg-indigo-900 rounded-xl"
+        : "flex items-center justify-center w-10 h-10 bg-blue-100 rounded-xl"
+      }>
+        <Upload className={darkMode ? "w-5 h-5 text-indigo-300" : "w-5 h-5 text-blue-600"} />
+      </div>
+      <h2 className={darkMode ? "text-xl font-semibold text-gray-100" : "text-xl font-semibold text-gray-900"}>Cargar archivo</h2>
+    </div>
+    <div className="space-y-4">
+      <input
+        type="file"
+        accept=".csv"
+        onChange={(e) => setFile(e.target.files?.[0] || null)}
+        className={darkMode
+          ? "block w-full text-sm text-gray-300 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-indigo-950 file:to-indigo-900 file:text-indigo-200 hover:file:from-indigo-900 hover:file:to-indigo-800 file:cursor-pointer file:transition-all file:duration-200"
+          : "block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-blue-50 file:to-indigo-50 file:text-blue-700 hover:file:from-blue-100 hover:file:to-indigo-100 file:cursor-pointer file:transition-all file:duration-200"
+        }
+      />
+    </div>
+  </div>
+  <div className="flex items-center justify-center justify-end mt-6 sm:justify-end">
+    <button
+      onClick={handleUpload}
+      disabled={!file || isUploading}
+      className={darkMode
+        ? "flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-indigo-800 to-indigo-600 hover:from-indigo-900 hover:to-indigo-700 rounded-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+        : "flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+      }
+    >
+      {isUploading ? (
+        <>
+          <RefreshCw className="w-4 h-4 animate-spin" />
+          <span>Subiendo...</span>
+        </>
+      ) : (
+        <>
+          <Upload className="w-4 h-4" />
+          <span>Subir archivo CSV</span>
+        </>
+      )}
+    </button>
+  </div>
+</div>
 
           {/* Export */}
-          <div className={
-            darkMode
-              ? "p-8 transition-all duration-300 border bg-gray-900/70 backdrop-blur-sm rounded-2xl border-gray-700/50 hover:shadow-xl"
-              : "p-8 transition-all duration-300 border bg-white/70 backdrop-blur-sm rounded-2xl border-gray-200/50 hover:shadow-xl"
-          }>
-            <div className="flex items-center mb-6 space-x-3">
-              <div className={
-                darkMode
-                  ? "flex items-center justify-center w-10 h-10 bg-green-900 rounded-xl"
-                  : "flex items-center justify-center w-10 h-10 bg-green-100 rounded-xl"
-              }>
-                <Download className={darkMode ? "w-5 h-5 text-green-300" : "w-5 h-5 text-green-600"} />
-              </div>
-              <h2 className={darkMode ? "text-xl font-semibold text-gray-100" : "text-xl font-semibold text-gray-900"}>Exportar datos</h2>
-            </div>
-            <p className={darkMode ? "mb-4 text-gray-400" : "mb-4 text-gray-600"}>Descargá todos los registros actuales en formato CSV.</p>
-            <button
-              onClick={downloadCSV}
-              className={
-                darkMode
-                  ? "flex items-center justify-center w-full px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-green-800 to-emerald-800 hover:from-green-900 hover:to-emerald-900 rounded-xl hover:scale-105"
-                  : "flex items-center justify-center w-full px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-xl hover:scale-105"
-              }
-            >
-              <Download className="w-4 h-4" />
-              <span>Exportar CSV</span>
-            </button>
-          </div>
+          <div className={darkMode
+  ? "p-8 transition-all duration-300 border bg-gray-900/70 backdrop-blur-sm rounded-2xl border-gray-700/50 hover:shadow-xl flex flex-col justify-between h-full"
+  : "p-8 transition-all duration-300 border bg-white/70 backdrop-blur-sm rounded-2xl border-gray-200/50 hover:shadow-xl flex flex-col justify-between h-full"
+}>
+  <div>
+    <div className="flex items-center mb-6 space-x-3">
+      <div className={darkMode
+        ? "flex items-center justify-center w-10 h-10 bg-green-900 rounded-xl"
+        : "flex items-center justify-center w-10 h-10 bg-green-100 rounded-xl"
+      }>
+        <Download className={darkMode ? "w-5 h-5 text-green-300" : "w-5 h-5 text-green-600"} />
+      </div>
+      <h2 className={darkMode ? "text-xl font-semibold text-gray-100" : "text-xl font-semibold text-gray-900"}>Exportar datos</h2>
+    </div>
+    <p className={darkMode ? "mb-4 text-gray-400" : "mb-4 text-gray-600"}>Descargá todos los registros actuales en formato CSV.</p>
+  </div>
+  <div className="flex items-center justify-center justify-end mt-6 sm:justify-end">
+    <button
+      onClick={downloadCSV}
+      className={darkMode
+        ? "flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-green-800 to-emerald-800 hover:from-green-900 hover:to-emerald-900 rounded-xl hover:scale-105"
+        : "flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-xl hover:scale-105"
+      }
+    >
+      <Download className="w-4 h-4" />
+      <span>Exportar CSV</span>
+    </button>
+  </div>
+</div>
         </div>
 
         {/* New Record */}
@@ -468,7 +467,7 @@ function App() {
                             }
                           >
                             <Save className="w-4 h-4 mr-1" />
-                            Guardar
+                            <span className="hidden sm:inline">Guardar</span>
                           </button>
                           <button
                             onClick={() => handleDelete(i)}
@@ -479,7 +478,7 @@ function App() {
                             }
                           >
                             <Trash2 className="w-4 h-4 mr-1" />
-                            Eliminar
+                            <span className="hidden sm:inline">Eliminar</span>
                           </button>
                         </div>
                       </td>
