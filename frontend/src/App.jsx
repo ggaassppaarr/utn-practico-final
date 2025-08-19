@@ -11,7 +11,10 @@ import {
   RefreshCw,
   Moon,
   Sun,
+  X,
 } from 'lucide-react';
+
+import LoginModal from './LoginModal';
 
 function App() {
   const [file, setFile] = useState(null);
@@ -20,6 +23,10 @@ function App() {
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  // const [token, setToken] = useState(localStorage.getItem('token') || '');
 
   // Persistencia en localStorage
   useEffect(() => {
@@ -108,9 +115,31 @@ function App() {
   const downloadCSV = () => {
     try {
       window.location.href = 'http://localhost:3001/export';
-    } catch (e) {
-      console.error(e);
+    } catch {
       alert('No se pudo descargar el CSV.');
+    }
+  };
+
+  const handleLogin = async (email, password) => {
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      const res = await fetch('http://localhost:3001/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }), // <-- CAMBIA username por email
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        setLoginOpen(false);
+      } else {
+        setLoginError(data.message || 'Credenciales incorrectas');
+      }
+    } catch {
+      setLoginError('Error de red');
+    } finally {
+      setLoginLoading(false);
     }
   };
 
@@ -171,6 +200,16 @@ function App() {
                 aria-label="Toggle dark mode"
               >
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+              <button
+                onClick={() => setLoginOpen(true)}
+                className={darkMode
+                  ? "flex items-center px-4 py-2 space-x-2 text-gray-300 transition-all duration-200 rounded-lg hover:text-white hover:bg-gray-800"
+                  : "flex items-center px-4 py-2 space-x-2 text-gray-600 transition-all duration-200 rounded-lg hover:text-gray-900 hover:bg-gray-100"
+                }
+              >
+                <span className="hidden sm:inline">Login</span>
+                <Sun className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -272,7 +311,7 @@ function App() {
       />
     </div>
   </div>
-  <div className="flex items-center justify-center justify-end mt-6 sm:justify-end">
+  <div className="flex items-center justify-end mt-6 sm:justify-end">
     <button
       onClick={handleUpload}
       disabled={!file || isUploading}
@@ -313,7 +352,7 @@ function App() {
     </div>
     <p className={darkMode ? "mb-4 text-gray-400" : "mb-4 text-gray-600"}>Descargá todos los registros actuales en formato CSV.</p>
   </div>
-  <div className="flex items-center justify-center justify-end mt-6 sm:justify-end">
+  <div className="flex items-center justify-end mt-6 sm:justify-end">
     <button
       onClick={downloadCSV}
       className={darkMode
@@ -489,6 +528,15 @@ function App() {
             )}
           </div>
         </div>
+
+        {/* Login Modal */}
+        <LoginModal
+  open={loginOpen}
+  onClose={() => setLoginOpen(false)}
+  onLogin={handleLogin}
+  loading={loginLoading}
+  error={loginError}
+/>
       </div>
     </div>
   );

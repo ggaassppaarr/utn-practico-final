@@ -8,6 +8,7 @@ import { parse } from 'csv-parse'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import authRoutes from '../routes/auth.js'
 
 const app = express()
 const prisma = new PrismaClient()
@@ -20,6 +21,7 @@ app.use(helmet())
 app.use(cors({ origin: ORIGIN, credentials: true }))
 app.use(express.json({ limit: '10mb' }))
 app.use(cookieParser())
+app.use('/auth', authRoutes)
 
 // --- Auth (basic) ---
 app.post('/auth/register', async (req, res) => {

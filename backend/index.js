@@ -7,6 +7,7 @@ import { stringify } from 'csv-stringify/sync';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import rateLimit from 'express-rate-limit';
+import authRoutes from './routes/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -86,5 +87,7 @@ app.get('/export', (req, res) => {
   fs.writeFileSync(filePath, csv);
   res.download(filePath);
 });
+
+app.use('/auth', authRoutes);
 
 app.listen(PORT, () => console.log(`Servidor backend en http://localhost:${PORT}`));
