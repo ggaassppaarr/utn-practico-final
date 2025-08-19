@@ -168,7 +168,7 @@ function App() {
   return (
     <div className={darkMode
       ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-indigo-950 text-gray-100"
-      : "min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
+      : "min-h-screen bg-gradient-to-br from-blue-100 via-indigo-200 to-indigo-400"
     }>
       {/* Top Nav */}
       <nav className={darkMode
@@ -185,7 +185,7 @@ function App() {
               }>
                 <Database className="w-6 h-6 text-white" />
               </div>
-              <div>
+              <div className="hidden min-[500px]:block">
                 <h1 className={
                   darkMode
                     ? "text-xl font-bold text-transparent bg-gradient-to-r from-gray-100 to-gray-400 bg-clip-text"
@@ -195,7 +195,7 @@ function App() {
                 </h1>
                 <p className={
                   (darkMode ? "text-sm text-gray-400" : "text-sm text-gray-500") +
-                  " hidden sm:block" // Oculta en mobile, muestra en sm y arriba
+                  " hidden sm:block"
                 }>
                   Carga, edición y exportación de registros
                 </p>
@@ -211,8 +211,8 @@ function App() {
                   <button
                     onClick={handleLogout}
                     className={darkMode
-                      ? "flex items-center px-4 py-2 space-x-2 text-red-300 transition-all duration-200 rounded-lg hover:text-white hover:bg-red-800"
-                      : "flex items-center px-4 py-2 space-x-2 text-red-600 transition-all duration-200 rounded-lg hover:text-white hover:bg-red-600"
+                      ? "flex items-center px-2 py-2 space-x-2 text-red-300 transition-all duration-200 rounded-lg hover:text-white hover:bg-red-800"
+                      : "flex items-center px-2 py-2 space-x-2 text-red-600 transition-all duration-200 rounded-lg hover:text-white hover:bg-red-600"
                     }
                   >
                     <X className="w-4 h-4" />
@@ -248,16 +248,18 @@ function App() {
 
       {/* Botón Actualizar centrado debajo del header */}
       <div className="flex justify-center px-4 py-4 mx-auto max-w-7xl">
-        <button
-          onClick={fetchData}
-          className={
-            "flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-          }
-        >
-          <RefreshCw className="w-5 h-5 mr-2" />
-          <span>Actualizar</span>
-        </button>
-      </div>
+  <button
+    onClick={fetchData}
+    className={
+      darkMode
+        ? "flex items-center px-6 py-3 space-x-2 font-semibold text-gray-200 bg-gray-800 border border-gray-700 rounded-xl hover:bg-gray-700 hover:text-white transition-all duration-200"
+        : "flex items-center px-6 py-3 space-x-2 font-semibold text-blue-700 bg-blue-50 border border-blue-200 rounded-xl hover:bg-blue-100 transition-all duration-200"
+    }
+  >
+    <RefreshCw className="w-5 h-5 mr-2" />
+    <span>Actualizar</span>
+  </button>
+</div>
 
       <div className="px-4 pt-0 pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Stats */}
@@ -440,24 +442,26 @@ function App() {
                       onChange={(e) => setNewRow({ ...newRow, [key]: e.target.value })}
                       className={
                         darkMode
-                          ? "w-full px-4 py-3 transition-all duration-200 bg-gray-900 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100"
-                          : "w-full px-4 py-3 transition-all duration-200 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          ? "w-full px-3 py-2 sm:px-5 sm:py-3 transition-all duration-200 bg-gray-900 border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100 text-sm"
+                          : "w-full px-3 py-2 sm:px-5 sm:py-3 transition-all duration-200 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       }
                     />
                   </div>
                 ))}
               </div>
-              <button
-                onClick={handleAdd}
-                className={
-                  darkMode
-                    ? "inline-flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-purple-800 to-pink-800 hover:from-purple-900 hover:to-pink-900 rounded-xl hover:scale-105"
-                    : "inline-flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl hover:scale-105"
-                }
-              >
-                <Save className="w-4 h-4" />
-                <span>Añadir registro</span>
-              </button>
+              <div className="flex justify-end">
+                <button
+                  onClick={handleAdd}
+                  className={
+                    darkMode
+                      ? "inline-flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-purple-800 to-pink-800 hover:from-purple-900 hover:to-pink-900 rounded-xl hover:scale-105"
+                      : "inline-flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 transform bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-xl hover:scale-105"
+                  }
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Añadir registro</span>
+                </button>
+              </div>
             </>
           ) : (
             <p className={darkMode ? "text-gray-400" : "text-gray-500"}>Cargá un CSV para poder agregar registros.</p>
@@ -530,11 +534,21 @@ function App() {
                               updated[i][key] = e.target.value;
                               setRows(updated);
                             }}
+                            onFocus={key === 'id' ? (e) => e.target.select() : undefined}
                             className={
-                              darkMode
-                                ? "w-full px-3 py-2 text-sm bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100"
-                                : "w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              key === 'id'
+                                ? (
+                                  darkMode
+                                    ? "w-full min-w-[40px] px-1 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100 overflow-x-auto"
+                                    : "w-full min-w-[40px] px-1 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent overflow-x-auto"
+                                )
+                                : (
+                                  darkMode
+                                    ? "w-full px-1 py-1 sm:px-3 sm:py-2 text-sm bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-gray-100"
+                                    : "w-full px-1 py-1 sm:px-3 sm:py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                )
                             }
+                            style={key === 'id' ? { fontFamily: 'monospace' } : undefined}
                           />
                         </td>
                       ))}
