@@ -12,6 +12,7 @@ import {
   Moon,
   Sun,
   X,
+  User,
 } from 'lucide-react';
 
 import LoginModal from './LoginModal';
@@ -143,17 +144,36 @@ function App() {
     }
   };
 
+  function isLoggedIn() {
+    return !!localStorage.getItem('token');
+  }
+
+  function getUserEmail() {
+    // Decodifica el token JWT para obtener el email
+    const token = localStorage.getItem('token');
+    if (!token) return '';
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.email || '';
+    } catch {
+      return '';
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('token');
+    window.location.reload();
+  }
+
   return (
-    <div className={
-      darkMode
-        ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-indigo-950 text-gray-100"
-        : "min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
+    <div className={darkMode
+      ? "min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-indigo-950 text-gray-100"
+      : "min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
     }>
       {/* Top Nav */}
-      <nav className={
-        darkMode
-          ? "sticky top-0 z-40 border-b bg-gray-900/80 backdrop-blur-md border-gray-700/50"
-          : "sticky top-0 z-40 border-b bg-white/80 backdrop-blur-md border-gray-200/50"
+      <nav className={darkMode
+        ? "sticky top-0 z-40 border-b bg-gray-900/80 backdrop-blur-md border-gray-700/50"
+        : "sticky top-0 z-40 border-b bg-white/80 backdrop-blur-md border-gray-200/50"
       }>
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -173,50 +193,73 @@ function App() {
                 }>
                   CSV Manager
                 </h1>
-                <p className={darkMode ? "text-sm text-gray-400" : "text-sm text-gray-500"}>
+                <p className={
+                  (darkMode ? "text-sm text-gray-400" : "text-sm text-gray-500") +
+                  " hidden sm:block" // Oculta en mobile, muestra en sm y arriba
+                }>
                   Carga, edición y exportación de registros
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              <button
-                onClick={fetchData}
-                className={
-                  darkMode
+              {/* Botones de login/logout */}
+              {isLoggedIn() ? (
+                <div className="flex items-center space-x-3">
+                  <span className={darkMode ? "text-sm text-gray-300" : "text-sm text-gray-700"}>
+                    {getUserEmail()}
+                  </span>
+                  <button
+                    onClick={handleLogout}
+                    className={darkMode
+                      ? "flex items-center px-4 py-2 space-x-2 text-red-300 transition-all duration-200 rounded-lg hover:text-white hover:bg-red-800"
+                      : "flex items-center px-4 py-2 space-x-2 text-red-600 transition-all duration-200 rounded-lg hover:text-white hover:bg-red-600"
+                    }
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setLoginOpen(true)}
+                  className={darkMode
                     ? "flex items-center px-4 py-2 space-x-2 text-gray-300 transition-all duration-200 rounded-lg hover:text-white hover:bg-gray-800"
                     : "flex items-center px-4 py-2 space-x-2 text-gray-600 transition-all duration-200 rounded-lg hover:text-gray-900 hover:bg-gray-100"
-                }
-              >
-                <RefreshCw className="w-4 h-4" />
-                <span className="hidden sm:inline">Actualizar</span>
-              </button>
+                  }
+                >
+                  <span className="hidden sm:inline">Login</span>
+                  <User className="w-4 h-4" />
+                </button>
+              )}
+              {/* Toggle dark/light theme aquí, alineado a la derecha */}
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className={
-                  darkMode
-                    ? "flex items-center px-2 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-yellow-300"
-                    : "flex items-center px-2 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-indigo-600"
+                className={darkMode
+                  ? "flex items-center px-2 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-yellow-300 ml-2"
+                  : "flex items-center px-2 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-indigo-600 ml-2"
                 }
                 aria-label="Toggle dark mode"
               >
                 {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <button
-                onClick={() => setLoginOpen(true)}
-                className={darkMode
-                  ? "flex items-center px-4 py-2 space-x-2 text-gray-300 transition-all duration-200 rounded-lg hover:text-white hover:bg-gray-800"
-                  : "flex items-center px-4 py-2 space-x-2 text-gray-600 transition-all duration-200 rounded-lg hover:text-gray-900 hover:bg-gray-100"
-                }
-              >
-                <span className="hidden sm:inline">Login</span>
-                <Sun className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      {/* Botón Actualizar centrado debajo del header */}
+      <div className="flex justify-center px-4 py-4 mx-auto max-w-7xl">
+        <button
+          onClick={fetchData}
+          className={
+            "flex items-center px-6 py-3 space-x-2 font-semibold text-white transition-all duration-200 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+          }
+        >
+          <RefreshCw className="w-5 h-5 mr-2" />
+          <span>Actualizar</span>
+        </button>
+      </div>
+
+      <div className="px-4 pt-0 pb-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Stats */}
         <div className={
           darkMode
